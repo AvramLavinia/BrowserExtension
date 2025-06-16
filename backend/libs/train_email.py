@@ -4,6 +4,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.metrics import accuracy_score, classification_report
 import pickle
+import os
+
+os.makedirs('./model', exist_ok=True)  # Add this
 
 # Load dataset
 df = pd.read_csv('../datasets/emails.csv')  # Ensure your CSV has 'Email Text' and 'Email Type' columns

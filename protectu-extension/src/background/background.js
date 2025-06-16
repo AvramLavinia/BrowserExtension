@@ -71,8 +71,7 @@ async function handleUrl(tabId, url) {
     chrome.storage.local.set({ alerts: [...alerts, entry] });
   });
 
-  // No longer report to backend
-  console.log('[ProtectU] Not reporting to backend (report-risky-url removed).');
+  
 }
 
 /**
@@ -121,10 +120,31 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(({ tabId, url, frameId })
 
 // Reloads and manual URL edits
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (
+    changeInfo.status === 'complete' &&
+    tab.url &&
+    tab.url.includes('mail.google.com')
+  ) {
+    console.log('[ProtectU] Gmail tab detected. Attempting injection...');
+
+    chrome.scripting.executeScript({
+      target: { tabId: tabId },
+      files: ['content/content.js']
+    }, (results) => {
+      if (chrome.runtime.lastError) {
+        console.error('[ProtectU] Injection failed:', chrome.runtime.lastError.message);
+      } else {
+        console.log('[ProtectU] Script injected. Result:', results);
+      }
+    });
+  }
+
   if (changeInfo.status === 'complete' && tab.url && tab.active) {
     handleUrl(tabId, tab.url);
   }
 });
+
+
 
 // Cleanup on tab close
 chrome.tabs.onRemoved.addListener((tabId) => {

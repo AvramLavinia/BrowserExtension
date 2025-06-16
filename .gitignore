@@ -88,6 +88,7 @@ logs/
 .venv/
 __pycache__/
 *.log
+backend/.venv/
 
 
 

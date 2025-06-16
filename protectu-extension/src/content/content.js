@@ -1,5 +1,5 @@
 // content.js
-
+console.log("[ProtectU] Content script loaded");
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.type === 'CLEAR_BANNER') {
     const b = document.getElementById('protectu-warning');
@@ -37,7 +37,7 @@ chrome.runtime.onMessage.addListener((msg) => {
 
 // --- Email scanning logic ---
 function scanEmail() {
-  const bodyNode = document.querySelector('.email-body-selector');
+ const bodyNode = document.querySelector('.a3s'); // Gmail message body container
   if (!bodyNode) return;
   const text = bodyNode.innerText;
   chrome.runtime.sendMessage({ type: 'EMAIL_CHECK', email: text });
